@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<title>Text-aware Emotional TTS via Emotion-Guided Residual Vector Quantization and Codebook Update Strategy</title>
+	<meta name="generator" content="Jekyll v3.9.0">
+	<meta property="og:title" content="Text-aware Emotional TTS via Emotion-Guided Residual Vector Quantization and Codebook Update Strategy">
+	<meta property="og.locale" content ="en_US">
+	<link rel="canonical" href="https://github.com/pyupyu803/Demo_icassp2025">
+	<meta property="og:url" content="https://github.com/pyupyu803/Demo_icassp2025">
+	<meta name="twitter:card" content="summary">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#157878">
+	<link rel="stylesheet" href="./style.css">
+</head>
+
+<section class = "page-header">
+</section>
+
+<section class="main-context">
+	<h1 id=""><center>Text-aware Emotional TTS via Emotion-Guided Residual Vector Quantization and Codebook Update Strategy</center></h1>
+
+	<!-- <div style="display: none;">
+	  <center>Gaeun Kim<sup>1</sup>, and Joon-Hyuk Chang<sup>2</sup></center>
+	  <br>
+	  <center>Department of Electronic Engineering, Hanyang University, Seoul, Republic of Korea <sup>1, 2</sup></center>
+	  <center>johnny960423@gmail.com<sup>1</sup>,&nbsp;&nbsp;&nbsp; jchang@hanyang.ac.kr <sup>2</sup></center>
+	</div> -->
+
+	<!-- 대체 텍스트 -->
+	<div>
+	  <center><i>Anonymous submission to Interspeech 2025</i></center>
+	</div>
+
+
+	<center><h2 id="abstract">Abstract</h2></center>
+	<br>
+	<p>
+    Residual vector quantization (RVQ) has recently been adopted to extract emotion representations when training text-based emotion predictor without reference speech for expressive text-to-speech (TTS). However, the unsupervised nature of VQ and the issue of codebook collapse reduce the separability and diversity of emotion representations, leading to overlapping emotion embeddings and limiting expressiveness. To address these issues, we propose an emotion guided RVQ by initializing VQ codebooks with emotion related representations to better capture emotional cues and prevent overlapping emotion embeddings. Additionally, we apply a specific codebook update strategy to separate data that tend to cluster into a single codebook with mixed emotions, so that each codebook represents only one emotion. Experiments show that our method significantly improves the expressiveness of synthesized speech and the separation of emotion embeddings, leading to more distinct and diverse emotional outputs.
+	</p>
+	<br>
+	<center><h2><p class="toc_title">Contents</p></h2></center>
+	<div id="toc_container" style="font-size: 18px;">
+		<ol>
+			<li><a href="#1">Model Architecture & Key Methods</a></li>
+			<li><a href="#2">Speech Demos</a></li>
+			<li><a href="#3">Evaluation Results</a></li>
+		</ol>
+	</div>
+	<br>
+	<center><a name="1"><h2>1. Model Architecture & Key Methods</h2></a></center>
+	
+
+	<div style="margin-top: 20px;">
+	  <div style="margin-bottom: 20px;">
+	    <h3>1.1. Model Architecture</h3>
+	    <center>
+	  <img src="./FULL.png" style="max-width: 100%; height: auto;" title="Proposed Model Architecture">
+	</center>
+	  </div>
+	  <br>
+	  <div>
+	    <h3>1.2. Key Methods</h3>
+		<div id="toc_container" style="font-size: 18px;">
+			<ul>
+				<li>Emotion-guided residual vector quantization to extract style embeddings without losing emotional information</li>
+				<li>Reviving dead codes to enable fast optimization of the codebook and improve separability of emotions</li>
+			</ul>
+		</div>
+	  </div>
+	</div>
+
+
+	<br>
+
+	<center><a name="2"><h2>2. Demos</h2></a></center>
+	<!-- <h3>2.1. Synthesized with Test Dataset</h3> -->
+		<ul><p>
+			All the model was trained with batch size 32 and reconstructed to wave form by fine-tuned HiFi-GAN universal model.
+		</p></ul>
+	<div style="overflow-x: auto;">
+	  <table style="border-collapse: collapse; width: 100%; font-size: 16px; text-align: center;">
+	    <tr>
+	      <th colspan="9" style="font-size: 20px; padding: 15px; border-bottom: 2px solid black;">Synthesize with Test Datset</th>
+	    </tr>
+	    <tr>
+	      <th style="border-top: 1px solid black; border-bottom: 1px solid black; width: 500px; text-align: center;">Text</th>
+	      <th style="border-top: 1px solid black; border-bottom: 1px solid black;">GT</th>
+	      <th style="border-top: 1px solid black; border-bottom: 1px solid black;">TSP-TTS</th>
+	      <th style="border-top: 1px solid black; border-bottom: 1px solid black;">TSP-TTS (w/ dead code update)</th>
+	      <th style="border-top: 1px solid black; border-bottom: 1px solid black;">Proposed</th>
+	      <th style="border-top: 1px solid black; border-bottom: 1px solid black;">Proposed (w/o style guided initialization)</th>
+        <th style="border-top: 1px solid black; border-bottom: 1px solid black;">Proposed (w/o cluster loss)</th>
+        <th style="border-top: 1px solid black; border-bottom: 1px solid black;">Proposed (w/o dead code update)</th>
+
+	    </tr>
+ <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Angry
+      </td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/GT/OES_ang_000353.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS/OES_ang_000353.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS-upd/OES_ang_000353.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed/OES_ang_000353.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-egi/OES_ang_000353.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-clu/OES_ang_000353.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-upd/OES_ang_000353.wav" controls preload></audio></td>
+    </tr>
+
+     <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Anxiety
+      </td>
+
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/GT/OES_anx_000418.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS/OES_anx_000418.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS-upd/OES_anx_000418.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed/OES_anx_000418.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-egi/OES_anx_000418.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-clu/OES_anx_000418.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-upd/OES_anx_000418.wav" controls preload></audio></td>
+    </tr>
+
+    <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Embarassment
+      </td>
+
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/GT/OES_emb_000666.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS/OES_emb_000666.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS-upd/OES_emb_000666.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed/OES_emb_000666.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-egi/OES_emb_000666.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-clu/OES_emb_000666.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-upd/OES_emb_000666.wav" controls preload></audio></td>
+    </tr>
+
+        <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Happy
+      </td>
+
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/GT/OES_hap_000441.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS/OES_hap_000441.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS-upd/OES_hap_000441.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed/OES_hap_000441.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-egi/OES_hap_000441.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-clu/OES_hap_000441.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-upd/OES_hap_000441.wav" controls preload></audio></td>
+    </tr>
+
+    <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Hurt
+      </td>
+
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/GT/OES_hur_000265.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS/OES_hur_000265.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS-upd/OES_hur_000265.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed/OES_hur_000265.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-egi/OES_hur_000265.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-clu/OES_hur_000265.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-upd/OES_hur_000265.wav" controls preload></audio></td>
+    </tr>
+
+    <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Neutral
+      </td>
+
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/GT/OES_neu_000183.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS/OES_neu_000183.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS-upd/OES_neu_000183.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed/OES_neu_000183.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-egi/OES_neu_000183.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-clu/OES_neu_000183.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-upd/OES_neu_000183.wav" controls preload></audio></td>
+    </tr>
+
+    <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Sad
+      </td>
+
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/GT/OES_sad_000072.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS/OES_sad_000072.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/TSP-TTS-upd/OES_sad_000072.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed/OES_sad_000072.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-egi/OES_sad_000072.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-clu/OES_sad_000072.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/testset_wavs/Proposed-abl-upd/OES_sad_000072.wav" controls preload></audio></td>
+    </tr>
+
+
+	  </table>
+	</div>
+
+	<br>
+
+<div style="overflow-x: auto;">
+  <table style="border-collapse: collapse; width: 100%; font-size: 16px; text-align: center;">
+    <tr>
+      <th colspan="5" style="font-size: 20px; padding: 15px; border-bottom: 2px solid black;">Synthesized with out-of-domain data  same sentance, same speaker</th>
+    </tr>
+    <tr>
+      <th style="border-top: 1px solid black; border-bottom: 1px solid black; min-width: 400px; max-width: 600px; text-align: center;">Text</th>
+      <th style="border-top: 1px solid black; border-bottom: 1px solid black;">TSP-TTS (female)</th>
+      <th style="border-top: 1px solid black; border-bottom: 1px solid black;">TSP-TTS (male)</th>
+      <th style="border-top: 1px solid black; border-bottom: 1px solid black;">Proposed (female)</th>
+      <th style="border-top: 1px solid black; border-bottom: 1px solid black;">Proposed (male)</th>
+    </tr>
+ <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Angry
+      </td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/OES_ang.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/CHY_ang.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/OES_ang.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/CHY_ang.wav" controls preload></audio></td>
+
+    </tr>
+    <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Anxiety
+      </td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/OES_anx.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/CHY_anx.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/OES_anx.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/CHY_anx.wav" controls preload></audio></td>
+    </tr>
+
+    <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Embarassment
+      </td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/OES_emb.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/CHY_emb.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/OES_emb.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/CHY_emb.wav" controls preload></audio></td>
+    </tr>
+
+    <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Happy
+      </td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/OES_hap.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/CHY_hap.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/OES_hap.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/CHY_hap.wav" controls preload></audio></td>
+    </tr>
+
+    <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Hurt
+      </td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/OES_hur.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/CHY_hur.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/OES_hur.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/CHY_hur.wav" controls preload></audio></td>
+    </tr>
+    <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Neutral
+      </td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/OES_neu.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/CHY_neu.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/OES_neu.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/CHY_neu.wav" controls preload></audio></td>
+    </tr>
+
+    <tr>
+      <td style="
+        border-top: 1px solid black; 
+        border-bottom: 1px solid black; 
+        padding: 10px; 
+        word-wrap: break-word; 
+        white-space: normal; 
+        line-height: 1.5; 
+        text-align: left; 
+        min-width: 300px; 
+        max-width: 500px; 
+        overflow: auto;">
+        Sad
+      </td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/OES_sad.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/TSP-TTS/CHY_sad.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/OES_sad.wav" controls preload></audio></td>
+      <td style="border-top: 1px solid black; border-bottom: 1px solid black;"><audio src="MySamples/single_wavs/Proposed/CHY_sad.wav" controls preload></audio></td>
+    </tr>
+  </table>
+</div>
+	<br>
+
+
+
+	<!-- <h3>2.2. Compare Different Historical Length on Proposed Model</h3> -->
+
+<!-- 
+	<br>
+	<br>
+	<center><a name="3"><h2>3. Evaluation Results</h2></a></center>
+
+		<ul><p>
+			<b>Mean Opinion Score(MOS)</b> and Dialogue Mean Opinion Score (D-MOS) was rated from 1 to 5. And average all the score with 95% confidence rate.
+		</p></ul>
+		<ul><p>
+			<b>Log-F0 Root Mean Square Error (F0 RMSE)</b> is the pitch accuracy. Pitch was extracted by pyworld library, and calculated into log scale. Then calculate with root mean square between ground truth and synthesized speech.
+		</p></ul>
+		<ul><p>
+			<b>Mel Ceptrial Distortion (MCD)</b> calculate the difference between ground truth audio and synthesized speech.
+		</p></ul>
+
+	<br>
+
+	<h3>3.1. Comparison With Other Models</h3>
+		<center>
+		  <img src="./Result1.png" alt="Image description" style="max-width: 100%; height: auto;">
+		</center>
+	<br>
+	<h3>3.2. Ablation Study Results</h3>
+
+		<ul><p>
+			<b>Matching Root Mean Square Error (M-RMSE)</b> is calculating the difference between mel prosody extractor results and text-only dialogue encoder results.
+		</p></ul>
+
+		<center>
+		  <img src="./Result 2.png" alt="Image description" style="max-width: 100%; height: auto;">
+		</center>
+
+
+</section>
+
+<br>
+<br>
+<br>
+<br>
+<hr>
+<footer class="site-footer">
+<span class="site-footer-credits">This page was generated by <a href="https://pages.github.com/">GitHub Pages</a>.</span>
+</footer>
+</section>
+</body>
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
+
+</html> -->
